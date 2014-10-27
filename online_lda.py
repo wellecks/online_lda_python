@@ -29,7 +29,6 @@
 import cPickle, string, numpy, getopt, sys, random, time, re, pprint
 
 import onlineldavb
-import wikirandom
 import time
 import sys
 
@@ -37,9 +36,9 @@ from printer import Printer
 import argparse
 
 argparser = argparse.ArgumentParser()
-argparser.add_argument("-i", "--input", dest="dataset", help="Input dataset filename.")
-argparser.add_argument("-o", "--outdir", dest="outdir", default='', help="Directory to place output files. (default='')")
-argparser.add_argument("-v", "--vocab_file", dest="vocab_file", help="Vocabulary filename.")
+argparser.add_argument("dataset", type=str, help="Input dataset filename.")
+argparser.add_argument("vocab_file", help="Vocabulary filename.")
+argparser.add_argument("-o", "--outdir", default='', help="Directory to place output files. (default='')")
 argparser.add_argument("-b", "--batchsize", dest="batchsize", type=int, default=256, help="Batch size. (default=256)")
 argparser.add_argument("-d", "--num_docs", dest="num_docs", type=int, default=7990787, help="Total # docs in dataset. (default=7990787)")
 argparser.add_argument("-k", "--num_topics", dest="num_topics", type=int, default=100, help="Number of topics. (default=100)")
@@ -94,11 +93,11 @@ def main():
             Printer("Processed {0} batches. ~ {1}% complete. Elapsed time: {2}s"
                 .format(i, pct, elapsed))
             if (iteration % args.model_out_freq == 0):
-                numpy.savetxt('%slambda-%d.dat' % args.outdir, iteration, olda._lambda)
-                numpy.savetxt('%sgamma-%d.dat' % args.outdir, iteration, gamma)
+                numpy.savetxt('{0}lambda-{1}.dat'.format(args.outdir, iteration), olda._lambda)
+                numpy.savetxt('{0}gamma-{1}.dat'.format(args.outdir, iteration), gamma)
 
-    numpy.savetxt('%slambda-final.dat', args.outdir, olda._lambda)
-    numpy.savetxt('%sgamma-final.dat', args.outdir, gamma)
+    numpy.savetxt('{0}lambda-final.dat'.format(args.outdir), olda._lambda)
+    numpy.savetxt('{0}gamma-final.dat'.format(args.outdir), gamma)
 
 # Lazily reads a file batch_size lines at a time.
 def batch_read(f, batch_size):
